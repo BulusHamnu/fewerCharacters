@@ -1,0 +1,282 @@
+/* css styling */
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    /* outline: 1px solid red; */
+}
+body {
+    background-color: white;
+    font-family: Arial, sans-serif;
+    color: black;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+header {
+    display: flex;
+    flex-flow: nowrap;
+    justify-content: space-between;
+    padding: 1rem;
+}
+header nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+header nav ul li a {
+    text-decoration: none;
+    color: black;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    transition: border-bottom 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: rgb(112, 105, 105);
+}
+.logo {
+    color: black;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    transition: border-bottom 0.3s ease;
+}
+.logo:hover {
+    color: rgb(112, 105, 105);
+}
+main {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin: 1rem;
+    padding: .5rem;
+}
+.about-main {
+    text-align: left;
+    align-items: flex-start;
+}
+.about-main h1 {
+    margin-bottom: 1rem;
+}
+.about-main h2 {
+    margin: .7rem 0;
+}
+.about-main p {
+    margin-bottom: 1.2rem;
+    line-height: 1.8rem;
+}
+.about-main ul {
+    margin-bottom: 1.5rem;
+    list-style-position: inside;
+}
+.about-main ul li {
+    margin-bottom: .7rem;
+}
+section {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 1rem;
+    padding: 2rem;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    width: 42rem;
+    border-radius: 5px; ;
+}
+.top-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+#charLimit {
+    font-size: 1rem;
+    width: 3.2rem;
+    padding: .2rem 0;
+    border: 1px solid black;
+}
+#limitLable {
+    margin-left: auto;
+    margin-right: 1rem;
+}
+label {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+textarea {
+    width: 100%;
+    padding: .4rem;
+    resize: vertical;
+    height: 9rem;
+}
+#outputText {
+    margin-top: 1rem;
+}
+.error {
+    color: red;
+    padding: .4rem;
+    display: none;
+}
+
+button {
+    margin: 1rem;
+    padding: .5rem 1rem;
+    align-self: flex-end;
+    border: none;
+    border-radius: 5px ;
+    cursor: pointer;
+    padding: .7rem 2rem;
+    transition: background-color 0.3s ease;
+}
+
+button.send-button {
+    background-color: rgb(67, 75, 81);
+    color: white;
+}
+button.send-button:hover {
+    background-color: black;
+}
+.copy-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(9, 9, 9,0.5);
+}
+.copy-button svg {
+    fill: black;
+    width: 1.1rem;
+    height: 1.1rem;
+}
+.copy-button:hover {
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+.copy-button:hover svg {
+    fill: white;
+}
+
+
+
+
+
+/* Media queries */
+@media (max-width: 767.98px) {
+    section {
+        width: 35rem;
+    }
+    button {
+        padding: .5rem 1.5rem;
+    }
+    .copy-button svg {
+        width: .9rem;
+        height: .8rem;
+    }
+    label {
+        font-size: 1.3rem;
+    }
+    .about-main {
+        padding: .7rem;
+        margin: 1rem 0;
+    }
+    .about-main h1 {
+        font-size: 1.7rem;
+    }
+    .about-main h2 {
+        font-size: 1.4rem;
+    }
+}
+
+
+/* Media query */
+
+@media (max-width: 580px) {
+    section {
+        width: 30rem;
+    }
+}
+
+@media (max-width: 500px) {
+    section {
+        width: 24rem;
+    }
+}
+
+@media (max-width: 400px) {
+    
+    section {
+        width: 21rem;
+        padding: .6rem;
+    }
+    
+    button {
+        padding: .5rem 1.5rem;
+    }
+    .copy-button svg {
+        width: .9rem;
+        height: .8rem;
+    }
+    label {
+        font-size: 1.1rem;
+    }
+    #charLimit {
+        font-size: .8rem;
+        width: 2.2rem;
+        padding: .2rem 0;
+    }
+
+    .about-main {
+        padding: .7rem;
+        margin: 1rem 0;
+    }
+    .about-main h1 {
+        font-size: 1.5rem;
+    }
+    .about-main h2 {
+        font-size: 1.3rem;
+    }
+    
+}
+
+@media (max-width: 359px) {
+    section {
+        width: 19rem;
+        padding: .6rem;
+    }
+    
+    button {
+        padding: .5rem 1.5rem;
+    }
+    .copy-button svg {
+        width: .9rem;
+        height: .8rem;
+    }
+    label {
+        font-size: 1.1rem;
+    }
+    #charLimit {
+        font-size: .8rem;
+        width: 2.2rem;
+        padding: .2rem 0;
+    }
+
+    .about-main {
+        padding: .7rem;
+        margin: 1rem 0;
+    }
+    .about-main h1 {
+        font-size: 1.5rem;
+    }
+    .about-main h2 {
+        font-size: 1.3rem;
+    }
+    
+}
+
+
+
+
+
+
+
+

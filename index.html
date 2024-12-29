@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shorten your text effortlessly with FewerCharacters.com. Enter your content, set your character limit, and get the perfect text to fit your needs. Try it now!">
+    <title>FewerCharacters: A Simple Tool to Shorten Your Texts</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">fewercharacter.com</a>
+            <nav aria-label="main-navigation">
+                <ul>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <!-- <h1>Fewer Characters</h1> -->
+            <section class="text-input">
+                <div class="top-label">
+                    <label for="inputText">Input text</label>
+                    <label for="charLimit" id="limitLable">Limit</label>
+                    <input type="number" name="limit" id="charLimit" value="20" min="20">
+                </div>
+                <textarea id="inputText" placeholder="input your text here.."></textarea>
+                <div class="error">Text should not be less than 40 characters and limit should not be less than 20!</div>
+                <button class="send-button" aria-label="Submit text for shortening">Send</button>
+            </section>
+            <section class="text-output">
+                <label for="outputText">Output</label>
+                <textarea id="outputText" placeholder="Generated text will apply here.." required></textarea>
+                <button class="copy-button" aria-label="Copy shortened text">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg>
+                    Copy
+                </button>
+            </section>
+        </main>
+    </div>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
