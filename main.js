@@ -1,5 +1,4 @@
 /* Source code */
-import {apiKey,apiKeyHuggingFace} from "./env/api_key.js";
 const sendBtn = document.querySelector(".send-button")
 const copyBtn = document.querySelector(".copy-button");
 const error = document.querySelector(".error");
