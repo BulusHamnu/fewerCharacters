@@ -6,8 +6,8 @@ const limitNum = document.querySelector("#charLimit")
 const textInput = document.querySelector("#inputText")
 const outputText = document.querySelector("#outputText");
 let HuggingFaceAPI = `https://api-inference.huggingface.co/models/facebook/bart-large-cnn`;
-let endpoint = `https://api.openai.com/v1/chat/completions`;
-const apiKey = process.env.fewerChararcterKey;
+
+
 
 let counts = 0;
 
@@ -15,39 +15,30 @@ let counts = 0;
 async function shortenSentences(sentences, limit) {
 
     try {
-        let response = await fetch(endpoint, {
+        let response = await fetch(`/api/shortentxt`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                "model": "gpt-4o-mini", 
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "You are a helpful assistant that shortens text."
-                    },
-                    {
-                        "role": "user",
-                        "content": `Shorten the following text to fit within ${limit} characters while preserving its meaning:\n\n${sentences}`
-                    }
-                ],
-                "temperature": 0.7
-            })
+            body: JSON.stringify(
+                {
+                    "sentences": `${sentences}`,
+                    "limit": `${limit}`
+                }                
+            )
         });
 
         if (response.ok) {
             let data = await response.json();
-            //console.log(data.choices[0].message.content.trim());
+            console.log(data.summary.trim());
             
-            return data.choices[0].message.content.trim(); 
+            return data.summary.trim(); 
         } else {
             counts--;
             if(counts > 0) {
                 alert("API request limit exceeded, retrying in 5 seconds...");
                 setTimeout(() => {
-                    shortenSentences(textInput.value,parseInt(limitNum.value))
+                    shortenSentences(sentences, limit)
                 },5000)
 
             } else {
