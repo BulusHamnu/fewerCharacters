@@ -8,6 +8,7 @@ const textInput = document.querySelector("#inputText")
 const outputText = document.querySelector("#outputText");
 let HuggingFaceAPI = `https://api-inference.huggingface.co/models/facebook/bart-large-cnn`;
 let endpoint = `https://api.openai.com/v1/chat/completions`;
+const apiKey = process.env.fewerChararcterKey;
 
 let counts = 0;
 
