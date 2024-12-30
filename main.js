@@ -5,6 +5,7 @@ const error = document.querySelector(".error");
 const limitNum = document.querySelector("#charLimit")
 const textInput = document.querySelector("#inputText")
 const outputText = document.querySelector("#outputText");
+const  clearBtn = document.querySelector(".clear-button")
 let HuggingFaceAPI = `https://api-inference.huggingface.co/models/facebook/bart-large-cnn`;
 
 
@@ -101,30 +102,26 @@ async function shortenSentences2 (sentences,limit) {
 
 
 async function sendRequest(e) {
-    if(e.target.innerHTML === "Send") {
-        let sentences = textInput.value;
-        let limit = parseInt(limitNum.value);
+    let sentences = textInput.value;
+    let limit = parseInt(limitNum.value);
     
-        if (sentences.length >= 40 && limit >= 20) {
-            // outputText.textContent = await shortenSentences2(sentences, limit);
-            counts = 3;
-            outputText.textContent = await shortenSentences(sentences, limit);
-            if(outputText.textContent) {
-                e.target.innerHTML = "Clear"
-            }
+    if (sentences.length >= 40 && limit >= 20) {
+        // outputText.textContent = await shortenSentences2(sentences, limit);
+        counts = 3;
+        outputText.textContent = await shortenSentences(sentences, limit);
+        if(outputText.textContent) {
+            clearBtn.style.display = 'block';
+        }
 
-        } else {
+    } else {
         error.style.display = "block";
         setTimeout(() => {error.style.display = "none";}, 3000);
 
-        }
-        
-    } else if (e.target.innerHTML === "Clear") {
-        textInput.value = "";
-        e.target.innerHTML = "Send";
     }
     
 }
+
+
 
 /* Button event listeners */
 sendBtn.addEventListener('click',sendRequest)
@@ -136,5 +133,9 @@ copyBtn.addEventListener("click", () => {
     setTimeout(() => {copyBtn.textContent = "Copy";}, 3000);
 });
 
-
+clearBtn.addEventListener("click", () => {
+    textInput.value = "";
+    outputText.textContent = "";
+    clearBtn.style.display = 'none';
+});
 
