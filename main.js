@@ -31,9 +31,11 @@ async function shortenSentences(sentences, limit) {
 
         if (response.ok) {
             let data = await response.json();
-            console.log(data.summary.trim());
+            // console.log(data.summary.trim());
+            console.log(data.summary);
             
-            return data.summary.trim(); 
+            return data.summary; 
+            // return data.summary.trim(); 
         } else {
             counts--;
             if(counts > 0) {

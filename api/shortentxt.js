@@ -25,7 +25,7 @@ export default async function shortenText(req, res) {
                     },
                     {
                         "role": "user",
-                        "content": `Shorten the following text to fit within ${limit} characters while preserving its meaning:\n\n${sentences}`
+                        "content": `Shorten the following text to fit within ${limit} characters while preserving its meaning and give me three or choices to choose from:\n\n${sentences}`
                     }
                 ],
                 "temperature": 0.7
@@ -36,7 +36,8 @@ export default async function shortenText(req, res) {
             let data = await response.json();
 
             //console.log(data.choices[0].message.content.trim());
-            res.status(200).json({ summary: data.choices[0].message.content.trim() });
+            res.status(200).json({ summary: data.choices });
+            // res.status(200).json({ summary: data.choices[0].message.content.trim() });
         } else {
             res.status(response.status).json({ error: 'Failed to fetch from OpenAI API.' });
         }
