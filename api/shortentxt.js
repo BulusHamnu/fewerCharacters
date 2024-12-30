@@ -25,9 +25,10 @@ export default async function shortenText(req, res) {
                     },
                     {
                         "role": "user",
-                        "content": `Shorten the following text to fit within ${limit} characters while preserving its meaning and give me three or choices to choose from:\n\n${sentences}`
+                        "content": `Shorten the following text to fit within ${limit} characters while preserving its meaning:\n\n${sentences}`
                     }
                 ],
+                "n": 3,
                 "temperature": 0.7
             })
         });
