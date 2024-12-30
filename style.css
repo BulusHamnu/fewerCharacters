@@ -110,7 +110,7 @@ textarea {
     resize: vertical;
     height: 14rem;
 }
-#outputText {
+.outputText {
     margin-top: 1rem;
 }
 .error {

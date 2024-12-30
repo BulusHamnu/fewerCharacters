@@ -1,11 +1,12 @@
 /* Source code */
 const sendBtn = document.querySelector(".send-button")
-const copyBtn = document.querySelector(".copy-button");
+const copyBtn = document.querySelectorAll(".copy-button");
 const error = document.querySelector(".error");
 const limitNum = document.querySelector("#charLimit")
 const textInput = document.querySelector("#inputText")
-const outputText = document.querySelector("#outputText");
-const  clearBtn = document.querySelector(".clear-button")
+const outputText = document.querySelectorAll("#outputText");
+const  clearBtn = document.querySelector(".clear-button");
+const main = document.querySelector("main");
 let HuggingFaceAPI = `https://api-inference.huggingface.co/models/facebook/bart-large-cnn`;
 
 
@@ -31,11 +32,10 @@ async function shortenSentences(sentences, limit) {
 
         if (response.ok) {
             let data = await response.json();
-            // console.log(data.summary.trim());
-            console.log(data.summary);
             
+            console.log(data.summary);
             return data.summary; 
-            // return data.summary.trim(); 
+            
         } else {
             counts--;
             if(counts > 0) {
@@ -102,6 +102,27 @@ async function shortenSentences2 (sentences,limit) {
 }
 
 
+function displaySentences(sentencesArray) {
+    sentencesArray.forEach((element,index) => {
+
+        let section = document.createElement('section');
+        section.classList.add('text-output');
+        section.innerHTML = `
+            <label for="outputText">Output-${index}</label>
+            <textarea class="outputText" placeholder="Generated text will apply here.." required>${element}</textarea>
+            <button class="copy-button" aria-label="Copy shortened text" data-textid=${index}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg>
+                 Copy
+            </button>
+        `;
+
+        main.appendChild(section);
+
+    });
+
+
+}
+
 
 async function sendRequest(e) {
     let sentences = textInput.value;
@@ -110,8 +131,10 @@ async function sendRequest(e) {
     if (sentences.length >= 40 && limit >= 20) {
         // outputText.textContent = await shortenSentences2(sentences, limit);
         counts = 3;
-        outputText.textContent = await shortenSentences(sentences, limit);
-        if(outputText.textContent) {
+        let textResult = await shortenSentences(sentences, limit);
+
+        displaySentences(textResult)
+        if(textResult) {
             clearBtn.style.display = 'block';
         }
 
@@ -128,16 +151,23 @@ async function sendRequest(e) {
 /* Button event listeners */
 sendBtn.addEventListener('click',sendRequest)
 
-copyBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(outputText.value);
-    copyBtn.textContent = "Copied!";
-
-    setTimeout(() => {copyBtn.textContent = "Copy";}, 3000);
+copyBtn.forEach((copyBtn) => {
+    copyBtn.addEventListener("click", () => {
+        let allTextOutput = document.querySelectorAll(".text-output")
+        
+        navigator.clipboard.writeText(allTextOutput[this.dataset.textid].value);
+        copyBtn.textContent = "Copied!";
+    
+        setTimeout(() => {copyBtn.textContent = "Copy";}, 3000);
+    });
 });
 
 clearBtn.addEventListener("click", () => {
     textInput.value = "";
-    outputText.textContent = "";
+    outputText.forEach((text) => {
+        textBox.value = "";
+    });
     clearBtn.style.display = 'none';
+
 });
 

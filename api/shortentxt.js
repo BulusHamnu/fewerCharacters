@@ -36,9 +36,11 @@ export default async function shortenText(req, res) {
         if (response.ok) {
             let data = await response.json();
 
+            let resultArray = data.choices.map( value => {return value.message.content.trim() });
+
             //console.log(data.choices[0].message.content.trim());
-            res.status(200).json({ summary: data.choices });
-            // res.status(200).json({ summary: data.choices[0].message.content.trim() });
+            res.status(200).json({ summary: resultArray });
+        
         } else {
             res.status(response.status).json({ error: 'Failed to fetch from OpenAI API.' });
         }
