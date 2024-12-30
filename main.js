@@ -4,7 +4,7 @@ const copyBtn = document.querySelectorAll(".copy-button");
 const error = document.querySelector(".error");
 const limitNum = document.querySelector("#charLimit")
 const textInput = document.querySelector("#inputText")
-const outputText = document.querySelectorAll("#outputText");
+const outputText = document.querySelectorAll(".outputText");
 const  clearBtn = document.querySelector(".clear-button");
 const main = document.querySelector("main");
 let HuggingFaceAPI = `https://api-inference.huggingface.co/models/facebook/bart-large-cnn`;
@@ -33,7 +33,7 @@ async function shortenSentences(sentences, limit) {
         if (response.ok) {
             let data = await response.json();
             
-            console.log(data.summary);
+            // console.log(data.summary);
             return data.summary; 
             
         } else {
@@ -108,8 +108,8 @@ function displaySentences(sentencesArray) {
         let section = document.createElement('section');
         section.classList.add('text-output');
         section.innerHTML = `
-            <label for="outputText">Output-${index}</label>
-            <textarea class="outputText" placeholder="Generated text will apply here.." required>${element}</textarea>
+            <label for="outputText">Output-${index + 1}</label>
+            <textarea class="outputText" placeholder="Generated text will apply here.." required >${element}</textarea>
             <button class="copy-button" aria-label="Copy shortened text" data-textid=${index}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg>
                  Copy
@@ -151,21 +151,21 @@ async function sendRequest(e) {
 /* Button event listeners */
 sendBtn.addEventListener('click',sendRequest)
 
-copyBtn.forEach((copyBtn) => {
-    copyBtn.addEventListener("click", () => {
-        let allTextOutput = document.querySelectorAll(".text-output")
+copyBtn.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        let allTextOutput = document.querySelectorAll(".outputText")
         
-        navigator.clipboard.writeText(allTextOutput[this.dataset.textid].value);
-        copyBtn.textContent = "Copied!";
+        navigator.clipboard.writeText(allTextOutput[btn.dataset.textid].value);
+        btn.textContent = "Copied!";
     
-        setTimeout(() => {copyBtn.textContent = "Copy";}, 3000);
+        setTimeout(() => {btn.textContent = "Copy";}, 3000);
     });
 });
 
 clearBtn.addEventListener("click", () => {
     textInput.value = "";
     outputText.forEach((text) => {
-        textBox.value = "";
+        text.value = "";
     });
     clearBtn.style.display = 'none';
 
