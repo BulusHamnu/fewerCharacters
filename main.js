@@ -125,7 +125,18 @@ function displaySentences(sentencesArray) {
 
 
 async function sendRequest(e) {
-    let sentences = textInput.value;
+
+    if (e.target.textContent === "Patse") {
+        navigator.clipboard.readText().then(text => {
+            textInput.value = text;
+            textInput.focus();
+            e.target.textContent = "Send"
+
+        }).catch(err => {
+            alert("Failed to paste clipboard text")
+        });
+    } else if (e.target.textContent === "Send") {
+        let sentences = textInput.value;
     let limit = parseInt(limitNum.value);
     
     if (sentences.length >= 40 && limit >= 20) {
@@ -143,6 +154,9 @@ async function sendRequest(e) {
         setTimeout(() => {error.style.display = "none";}, 3000);
 
     }
+    }
+
+    
     
 }
 
