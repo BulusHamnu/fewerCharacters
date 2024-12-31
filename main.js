@@ -1,6 +1,6 @@
 /* Source code */
 const sendBtn = document.querySelector(".send-button")
-const copyBtn = document.querySelectorAll(".copy-button");
+let copyBtn;
 const error = document.querySelector(".error");
 const limitNum = document.querySelector("#charLimit")
 const textInput = document.querySelector("#inputText")
@@ -120,6 +120,17 @@ function displaySentences(sentencesArray) {
 
     });
 
+    copyBtn = document.querySelectorAll(".copy-button");
+    copyBtn.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            let allTextOutput = document.querySelectorAll(".outputText")
+            
+            navigator.clipboard.writeText(allTextOutput[btn.dataset.textid].value);
+            btn.textContent = "Copied!";
+        
+            setTimeout(() => {btn.textContent = "Copy";}, 3000);
+        });
+    });
 
 }
 
@@ -165,16 +176,6 @@ async function sendRequest(e) {
 /* Button event listeners */
 sendBtn.addEventListener('click',sendRequest)
 
-copyBtn.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        let allTextOutput = document.querySelectorAll(".outputText")
-        
-        navigator.clipboard.writeText(allTextOutput[btn.dataset.textid].value);
-        btn.textContent = "Copied!";
-    
-        setTimeout(() => {btn.textContent = "Copy";}, 3000);
-    });
-});
 
 clearBtn.addEventListener("click", () => {
     textInput.value = "";
