@@ -158,9 +158,7 @@ button.send-button:hover {
 .copy-button:hover svg {
     fill: white;
 }
-.clear-button {
-    display: none;
-}
+
 .clear-button:hover {
     background-color: rgb(67, 75, 81);
     color: white;
