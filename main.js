@@ -169,7 +169,7 @@ sendBtn.addEventListener('click',sendRequest)
 
 clearBtn.addEventListener("click", (e) => {
 
-    if(e.target.textContent === "Patse") {
+    if(e.target.textContent === "Paste") {
         navigator.clipboard.readText().then(text => {
             textInput.value = text;
             textInput.focus();
@@ -189,7 +189,7 @@ clearBtn.addEventListener("click", (e) => {
         text.value = "";
         });
 
-        e.target.textContent = "Patse"
+        e.target.textContent = "Paste"
     }
 
     
