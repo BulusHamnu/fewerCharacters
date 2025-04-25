@@ -11,7 +11,6 @@ let HuggingFaceAPI = `https://api-inference.huggingface.co/models/facebook/bart-
 
 
 
-let counts = 0;
 
 /* Using OpenAi API */
 async function shortenSentences(sentences, limit) {
@@ -38,18 +37,11 @@ async function shortenSentences(sentences, limit) {
             
         } else {
             let error = await response.json();
+            if(response.status == 429) {
+                alert("Too many requests please wait a few seconds and try again!")
+            }
+            alert("Something went wrong please try again?")
             console.log(`${response.ok}\n${error.error}`)
-
-            // counts--;
-            // if(counts > 0) {
-            //     alert("API request limit exceeded, retrying in 5 seconds...");
-            //     setTimeout(() => {
-            //         shortenSentences(sentences, limit)
-            //     },5000)
-
-            // } else {
-            //     alert("unable to proceed please try again later!");
-            // }
             return [];
         }
     } catch (error) {
@@ -88,16 +80,6 @@ async function shortenSentences2 (sentences,limit) {
     
             return result;
         } else {
-            counts--;
-            if(counts > 0) {
-                alert("API request limit exceeded, retrying in 5 seconds...");
-                setTimeout(() => {
-                    shortenSentences2(textInput.value,parseInt(limitNum.value))
-                },5000)
-                    
-            } else {
-                    alert("unable to proceed please try again later!");
-            }
             return [];
         }
     } catch (error) {
