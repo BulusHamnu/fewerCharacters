@@ -42,7 +42,7 @@ export default async function shortenText(req, res) {
             res.status(200).json({ summary: resultArray });
         
         } else {
-            res.status(response.status).json({ error: 'Failed to fetch from OpenAI API.' });
+            res.status(response.status).json({ error: `${response.statusText}` });
         }
     } catch (error) {
            res.status(500).json({ error: 'Internal server error.' });

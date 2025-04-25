@@ -37,16 +37,19 @@ async function shortenSentences(sentences, limit) {
             return data.summary; 
             
         } else {
-            counts--;
-            if(counts > 0) {
-                alert("API request limit exceeded, retrying in 5 seconds...");
-                setTimeout(() => {
-                    shortenSentences(sentences, limit)
-                },5000)
+            let error = await response.json();
+            console.log(`${response.ok}\n${error.error}`)
 
-            } else {
-                alert("unable to proceed please try again later!");
-            }
+            // counts--;
+            // if(counts > 0) {
+            //     alert("API request limit exceeded, retrying in 5 seconds...");
+            //     setTimeout(() => {
+            //         shortenSentences(sentences, limit)
+            //     },5000)
+
+            // } else {
+            //     alert("unable to proceed please try again later!");
+            // }
 
         }
     } catch (error) {
