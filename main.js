@@ -50,7 +50,7 @@ async function shortenSentences(sentences, limit) {
             // } else {
             //     alert("unable to proceed please try again later!");
             // }
-
+            return [];
         }
     } catch (error) {
         console.error('Error:', error);
@@ -98,6 +98,7 @@ async function shortenSentences2 (sentences,limit) {
             } else {
                     alert("unable to proceed please try again later!");
             }
+            return [];
         }
     } catch (error) {
         console.log('Error:', error);
@@ -106,34 +107,36 @@ async function shortenSentences2 (sentences,limit) {
 
 
 function displaySentences(sentencesArray) {
-    sentencesArray.forEach((element,index) => {
+    if(sentencesArray.length > 0) {
+        sentencesArray.forEach((element,index) => {
 
-        let section = document.createElement('section');
-        section.classList.add('text-output');
-        section.innerHTML = `
-            <label for="outputText">Output-${index + 1}</label>
-            <textarea class="outputText" placeholder="Generated text will apply here.." required >${element}</textarea>
-            <button class="copy-button" aria-label="Copy shortened text" data-textid=${index}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg>
-                 Copy
-            </button>
-        `;
-
-        main.appendChild(section);
-
-    });
-
-    copyBtn = document.querySelectorAll(".copy-button");
-    copyBtn.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            let allTextOutput = document.querySelectorAll(".outputText")
-            
-            navigator.clipboard.writeText(allTextOutput[btn.dataset.textid].value);
-            btn.textContent = "Copied!";
-        
-            setTimeout(() => {btn.textContent = "Copy";}, 3000);
+            let section = document.createElement('section');
+            section.classList.add('text-output');
+            section.innerHTML = `
+                <label for="outputText">Output-${index + 1}</label>
+                <textarea class="outputText" placeholder="Generated text will apply here.." required >${element}</textarea>
+                <button class="copy-button" aria-label="Copy shortened text" data-textid=${index}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg>
+                     Copy
+                </button>
+            `;
+    
+            main.appendChild(section);
+    
         });
-    });
+    
+        copyBtn = document.querySelectorAll(".copy-button");
+        copyBtn.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                let allTextOutput = document.querySelectorAll(".outputText")
+                
+                navigator.clipboard.writeText(allTextOutput[btn.dataset.textid].value);
+                btn.textContent = "Copied!";
+            
+                setTimeout(() => {btn.textContent = "Copy";}, 3000);
+            });
+        });
+    }
 
 }
 
