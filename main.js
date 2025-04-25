@@ -39,6 +39,7 @@ async function shortenSentences(sentences, limit) {
             let error = await response.json();
             if(response.status == 429) {
                 alert("Too many requests please wait a few seconds and try again!")
+                return [];
             }
             alert("Something went wrong please try again?")
             console.log(`${response.ok}\n${error.error}`)
@@ -130,7 +131,6 @@ async function sendRequest(e) {
     
     if (sentences.length >= 40 && limit >= 20) {
         // outputText.textContent = await shortenSentences2(sentences, limit);
-        counts = 3;
         let textResult = await shortenSentences(sentences, limit);
 
         displaySentences(textResult)
