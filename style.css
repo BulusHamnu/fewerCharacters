@@ -116,7 +116,6 @@ textarea {
 .error {
     color: red;
     padding: .4rem;
-    display: none;
 }
 .btn-cont {
     display: flex;
