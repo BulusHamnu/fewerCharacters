@@ -1,101 +1,87 @@
 /* Source code */
-const sendBtn = document.querySelector(".send-button")
+const sendBtn = document.querySelector(".send-button");
 let copyBtn;
 const error = document.querySelector(".error");
-const limitNum = document.querySelector("#charLimit")
-const textInput = document.querySelector("#inputText")
+const limitNum = document.querySelector("#charLimit");
+const textInput = document.querySelector("#inputText");
 const outputText = document.querySelectorAll(".outputText");
-const  clearBtn = document.querySelector(".clear-button");
+const clearBtn = document.querySelector(".clear-button");
 const main = document.querySelector("main");
 let HuggingFaceAPI = `https://api-inference.huggingface.co/models/facebook/bart-large-cnn`;
 
-
-
-
 /* Using OpenAi API */
 async function shortenSentences(sentences, limit) {
+  try {
+    let response = await fetch(`/api/shortentxt`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sentences: `${sentences}`,
+        limit: `${limit}`,
+      }),
+    });
 
-    try {
-        let response = await fetch(`/api/shortentxt`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    "sentences": `${sentences}`,
-                    "limit": `${limit}`
-                }                
-            )
-        });
-
-        if (response.ok) {
-            let data = await response.json();
-            
-            // console.log(data.summary);
-            return data.summary; 
-            
-        } else {
-            let error = await response.json();
-            if(response.status == 429) {
-                alert("Too many requests please wait a few seconds and try again!")
-                return [];
-            }
-            alert("Something went wrong please try again?")
-            console.log(`${response.ok}\n${error.error}`)
-            return [];
-        }
-    } catch (error) {
-        console.error('Error:', error);
+    if (response.ok) {
+      let data = await response.json();
+      // console.log(data.summary);
+      return data.summary;
+    } else {
+      let error = await response.json();
+    //   console.log("An error occured while getting text from the backend: ", error);
+      alert(error.message);
+      return [];
     }
+  } catch (error) {
+    console.error("An error occured:", error);
+  }
 }
-
 
 /* Using Hugging face API */
-async function shortenSentences2 (sentences,limit) {
+async function shortenSentences2(sentences, limit) {
+  try {
+    let response = await fetch(HuggingFaceAPI, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKeyHuggingFace}`,
+      },
+      body: JSON.stringify({
+        inputs: `Summarize this text to fit within a character limit of ${limit}, without losing important information: ${sentences}`,
+        parameters: {
+          max_length: limit,
+          min_length: limit / 2,
+          top_k: 50,
+          top_p: 0.9,
+          temperature: 0.5,
+        },
+      }),
+    });
 
-    try {
-        let response = await fetch(HuggingFaceAPI,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKeyHuggingFace}`
-            },
-            body: JSON.stringify({
-                "inputs": `Summarize this text to fit within a character limit of ${limit}, without losing important information: ${sentences}`,
-                "parameters": {
-                    "max_length": limit,
-                    "min_length": limit/2,
-                    "top_k": 50,
-                    "top_p": 0.9,
-                    "temperature": 0.5
-                }
-            })
-        })
-    
-        
-        if (response.ok) {
-            let data = await response.json();
-            let result = data[0].summary_text;
-           // console.log(data[0].summary_text);
-    
-            return result;
-        } else {
-            return [];
-        }
-    } catch (error) {
-        console.log('Error:', error);
+    if (response.ok) {
+      let data = await response.json();
+      let result = data[0].summary_text;
+      // console.log(data[0].summary_text);
+
+      return result;
+    } else {
+      return [];
     }
+  } catch (error) {
+    console.log(
+      "An error occured while getting text from the backend using: ",
+      error
+    );
+  }
 }
 
-
 function displaySentences(sentencesArray) {
-    if(sentencesArray.length > 0) {
-        sentencesArray.forEach((element,index) => {
-
-            let section = document.createElement('section');
-            section.classList.add('text-output');
-            section.innerHTML = `
+  if (sentencesArray.length > 0) {
+    sentencesArray.forEach((element, index) => {
+      let section = document.createElement("section");
+      section.classList.add("text-output");
+      section.innerHTML = `
                 <label for="outputText">Output-${index + 1}</label>
                 <textarea class="outputText" placeholder="Generated text will apply here.." required >${element}</textarea>
                 <button class="copy-button" aria-label="Copy shortened text" data-textid=${index}>
@@ -103,83 +89,77 @@ function displaySentences(sentencesArray) {
                      Copy
                 </button>
             `;
-    
-            main.appendChild(section);
-    
-        });
-    
-        copyBtn = document.querySelectorAll(".copy-button");
-        copyBtn.forEach((btn) => {
-            btn.addEventListener("click", () => {
-                let allTextOutput = document.querySelectorAll(".outputText")
-                
-                navigator.clipboard.writeText(allTextOutput[btn.dataset.textid].value);
-                btn.textContent = "Copied!";
-            
-                setTimeout(() => {btn.textContent = "Copy";}, 3000);
-            });
-        });
-    }
 
+      main.appendChild(section);
+    });
+
+    copyBtn = document.querySelectorAll(".copy-button");
+    copyBtn.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        let allTextOutput = document.querySelectorAll(".outputText");
+
+        navigator.clipboard.writeText(allTextOutput[btn.dataset.textid].value);
+        btn.textContent = "Copied!";
+
+        setTimeout(() => {
+          btn.textContent = "Copy";
+        }, 3000);
+      });
+    });
+  }
 }
-
 
 async function sendRequest(e) {
+  let sentences = textInput.value;
+  let limit = parseInt(limitNum.value);
 
-    let sentences = textInput.value;
-    let limit = parseInt(limitNum.value);
-    
-    if (sentences.length >= 40 && limit >= 20) {
-        // outputText.textContent = await shortenSentences2(sentences, limit);
-        let textResult = await shortenSentences(sentences, limit);
+  if (sentences.length >= 40 && limit >= 20) {
+    // outputText.textContent = await shortenSentences2(sentences, limit);
+    let textResult = await shortenSentences(sentences, limit);
 
-        displaySentences(textResult)
-        if(textResult) { 
-            clearBtn.style.display = 'block';
-        }
-
-    } else {
-        error.style.display = "block";
-        setTimeout(() => {error.style.display = "none";}, 3000);
-
+    displaySentences(textResult);
+    if (textResult) {
+      clearBtn.style.display = "block";
     }
-
+  } else {
+    error.style.display = "block";
+    setTimeout(() => {
+      error.style.display = "none";
+    }, 3000);
+  }
 }
 
-    
-
-
-
-
 /* Button event listeners */
-sendBtn.addEventListener('click',sendRequest)
-
+sendBtn.addEventListener("click", sendRequest);
 
 clearBtn.addEventListener("click", (e) => {
+  const buttonText = e.target.textContent;
 
-    if(e.target.textContent === "Paste") {
-        navigator.clipboard.readText().then(text => {
-            textInput.value = text;
-            textInput.focus();
-            e.target.textContent = "Clear"
-
-        }).catch(err => {
-            alert("Failed to paste clipboard text");
+  switch (buttonText) {
+    case "Paste":
+      navigator.clipboard
+        .readText()
+        .then((text) => {
+          textInput.value = text;
+          textInput.focus();
+          e.target.textContent = "Clear";
+        })
+        .catch((err) => {
+          console.log("An error ocured while pasting text to clipboard.", err);
+          alert("Failed to paste clipboard text");
         });
+      // e.target.textContent = "Clear";
+      break;
 
-        e.target.textContent = "Clear"
-    }
-
-
-    if(e.target.textContent === "Clear") {
-        textInput.value = "";
-        outputText.forEach((text) => {
+    case "Clear":
+      textInput.value = "";
+      outputText.forEach((text) => {
         text.value = "";
-        });
+      });
 
-        e.target.textContent = "Paste"
-    }
-
-    
+      e.target.textContent = "Paste";
+      break;
+    default:
+      break;
+  }
 });
-
