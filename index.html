@@ -1,220 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Shorten your text effortlessly with FewerCharacters.com. Enter your content, set your character limit, and get the perfect text to fit your needs. Try it now!">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Shorten your text effortlessly with FewerCharacters.com. Enter your content, set your character limit, and get the perfect text to fit your needs. Try it now!"
+    />
     <title>FewerCharacters: A Simple Tool to Shorten Your Texts</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-    </div>
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <div class="container"></div>
 
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- React, Babel and ReactRouterDom import -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+    ></script>
     <script src="https://unpkg.com/react-router-dom@5.3.4/umd/react-router-dom.min.js"></script>
-
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script type="text/babel"" >
-    const { useState, useRef } = React;
-    const { BrowserRouter, Route, Switch, Link } = ReactRouterDOM;
 
-     /* Send request */
-    async function shortenSentences(sentences, limit, useApi = "OPEN_API") {
-    try {
-        let response = await fetch(`/api/shortentxt`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            sentences: `${sentences}`,
-            limit: `${limit}`,
-            useApi,
-        }),
-        });
+    <!-- Componet and pages import -->
+    <script type="text/babel" src="./src/components/header.jsx"></script>
+    <script type="text/babel" src="./src/pages/about.jsx"></script>
+    <script type="text/babel" src="./src/components/inputSection.jsx"></script>
+    <script type="text/babel" src="./src/components/outputSection.jsx"></script>
+    <script type="text/babel" src="./src/pages/home.jsx"></script>
+    <script type="module" src="./src/services/shortenSentence.js"></script>
 
-        if (response.ok) {
-        let data = await response.json();
-        return data.summary;
-        } else {
-        let error = await response.json();
-        console.log(
-            "An error occured while getting text from the backend: ",
-            error
+    <script type="text/babel">
+      const { useState, useRef } = React;
+      const { BrowserRouter, Route, Switch, Link } = ReactRouterDOM;
+
+      // App entry point
+      const App = () => {
+        return (
+          <BrowserRouter>
+            <Switch>
+              <Route path="/" exact component={HomePage}></Route>
+              <Route path="/about" component={AboutPage}></Route>
+            </Switch>
+          </BrowserRouter>
         );
-        alert(error.message);
-        return [];
-        }
-    } catch (error) {
-        console.log("An error occured:", error);
-    }
-    }
-
-    // header componet
-    const Header = () => {
-        
-        return(
-            <header>
-                <Link to="/" class="logo">fewercharacter.com</Link>
-                <nav aria-label="main-navigation">
-                    <ul>
-                        <li><Link to="/about">About</Link></li>
-                    </ul>
-                </nav>
-            </header>
-        )
-    }
-
-    // input text componet
-    const InputSection = ({ setSummaries }) => {
-        const [clearButtonStatus, setClearButtonStatus] = useState("Paste")
-        const [copiedText, setCopied ] = useState("")
-        const textArea = useRef(null)
-        const [limitInput, setLimitInput] = useState(20)
-        const [inputError, setInputError] = useState(false)
-        
-
-        // copy or clear text button onclick handler
-        function handleClearBtnClick() {
-            switch (clearButtonStatus) {
-                case "Paste":
-                navigator.clipboard
-                    .readText()
-                    .then((text) => {
-                    textArea.current.value = text;
-                    textArea.current.focus();
-
-                    setClearButtonStatus("Clear");
-                    })
-                    .catch((err) => {
-                    console.log("An error ocured while pasting text to clipboard.", err);
-                    alert("Failed to paste clipboard text");
-                    });
-                break;
-
-                case "Clear":
-                textArea.current.value = "";
-
-                setClearButtonStatus("Paste");
-                break;
-
-                default:
-                break;
-            }
-        }
-
-        /* Function for initiating request */
-        async function sendRequest(e) {
-            let sentences = textArea.current.value;
-            let limit = parseInt(limitInput);
-            setSummaries("")
-
-
-            if (sentences.length >= 40 && limit >= 20) {
-                // HUGGING_FACE_AI, OPEN_AI
-                let textResult = await shortenSentences(
-                sentences,
-                limit,
-                "HUGGING_FACE_AI"
-                );
-
-                setSummaries(textResult);
-
-            } else {
-                setInputError(true);
-                setTimeout(() => {
-                    setInputError(false);
-                }, 3000);
-            }
-        }
-
-        return(
-            <section class="text-input">
-                <div class="top-label">
-                    <label for="inputText">Input text</label>
-                    <label for="charLimit" id="limitLable">Limit</label>
-                    <input onChange={(e)=> (setLimitInput(e.target.value)) } type="number" name="limit" id="charLimit" value={limitInput} min="20"></input>
-                </div>
-                <textarea id="inputText" ref={textArea} placeholder="input your text here.."></textarea>
-
-                {inputError && (<div class="error">Text should not be less than 40 characters and limit should not be less than 20!</div>)}
-
-                <div class="btn-cont">
-                    <button onClick={()=> (handleClearBtnClick())} class="clear-button" aria-label="clear text">{clearButtonStatus}</button>
-                    <button onClick={()=>(sendRequest())} class="send-button" aria-label="Submit text for shortening">Send</button>
-                </div>
-            </section>
-        )
-    }
-    
-    // output text componet
-    const OutputSection = ({ summary }) => {
-        const outputText = useRef(null)
-
-        function handleCopyBtnClick(btn) {
-            navigator.clipboard.writeText(outputText.current.value);
-            btn.textContent = "Copied!";
-            setTimeout(() => {
-                btn.textContent = "Copy";
-            }, 3000);
-        }
-
-        return(
-            <section className={`text-output`}>
-                <label for="outputText">Output</label>
-                <textarea ref={outputText} class="outputText" placeholder="Generated text will apply here.." required >{summary}</textarea>
-                { /* copy button for output */}
-                <button onClick={(e)=>(handleCopyBtnClick(e.target))} class="copy-button" aria-label="Copy shortened text">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg>
-                    Copy
-                </button>
-            </section>
-        )
-    } 
-
-    // App homepage
-    const HomePage = () => {
-        const [summaries, setSummaries] = useState("")
-
-        return(
-            <>
-                <Header />
-                <main>
-                    <InputSection setSummaries={setSummaries} />
-
-                    { summaries.length <=0? ("") : (!Array.isArray(summaries)? <OutputSection summary={summaries} /> : (
-                        summaries.map((summary,index)=> ( <OutputSection summary={summaries} key={index} /> ))
-                    ))  }   
-                    
-                </main>
-            </>
-        )
-    }
-
-    // App aboutpage
-    const AboutPage = () => {
-        return(
-            <h1>Hello world</h1>
-        )
-    }  
-
-    // App entry point
-    const App = () => {  
-        return(
-            <BrowserRouter>
-                <Switch>
-                    <Route path="/" exact component={HomePage}></Route>
-                    <Route path="/about" component={AboutPage}></Route>
-                </Switch>
-            </BrowserRouter>
-        )
-    }
-    const container = document.querySelector(".container")
-    const root = ReactDOM.createRoot(container);
-    root.render(<App />);
-    
+      };
+      const container = document.querySelector(".container");
+      const root = ReactDOM.createRoot(container);
+      root.render(<App />);
     </script>
-</body>
+  </body>
 </html>
