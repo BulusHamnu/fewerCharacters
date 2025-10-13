@@ -1,4 +1,8 @@
-import { useOpenAPI, useHuggingFace } from "../services/requestFunctions.js";
+import {
+  useOpenAPI,
+  useHuggingFace,
+  useHuggingFace2,
+} from "../services/requestFunctions.js";
 export default async function shortenText(req, res) {
   const method = req.method;
 
@@ -14,7 +18,7 @@ export default async function shortenText(req, res) {
       let result = null;
       req.body.useApi === "OPEN_AI"
         ? (result = await useOpenAPI(sentences, limit))
-        : (result = await useHuggingFace(sentences, limit));
+        : (result = await useHuggingFace2(sentences, Number(limit)));
 
       if (result?.length <= 0) {
         return res.status(502).json({
